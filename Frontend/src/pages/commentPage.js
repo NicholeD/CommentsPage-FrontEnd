@@ -16,7 +16,6 @@ class CommentPage extends BaseClass {
     async mount() {
         document.getElementById('create-comment-form').addEventListener('submit', this.onCreate);
         this.client = new CommentClient();
-
         this.dataStore.addChangeListener(this.renderComments)
         this.onGetComments()
     }
@@ -25,9 +24,7 @@ class CommentPage extends BaseClass {
 
     async renderComments() {
         let resultArea = document.getElementById("result-info");
-
         const comments = this.dataStore.get("comments");
-
         if (comments) {
             let contentHTML = "<ul>"
             for (let comment of comments) {
@@ -54,7 +51,6 @@ class CommentPage extends BaseClass {
     async onCreate(event) {
         // Prevent the page from refreshing on form submit
         event.preventDefault();
-
         let owner = document.getElementById("create-comment-owner").value;
         let title = document.getElementById("create-comment-title").value;
         let content = document.getElementById("create-comment-content").value;

@@ -54,7 +54,6 @@ export default class CommentClient extends BaseClass {
         } catch (error) {
             this.handleError("getConcert", error, errorCallback)
         }
-
     }
 
     /**
