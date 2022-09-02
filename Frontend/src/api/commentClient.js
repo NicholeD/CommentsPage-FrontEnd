@@ -34,12 +34,12 @@ export default class CommentClient extends BaseClass {
         }
     }
 
-    async createComment(content, owner, title, errorCallback) {
+    async createComment(owner, title, content, errorCallback) {
         try {
             const response = await this.client.post(`/comment`, {
-                "content": content,
                 "owner": owner,
-                "title": title
+                "title": title,
+                "content": content,
             });
             return response.data;
         } catch (error) {
