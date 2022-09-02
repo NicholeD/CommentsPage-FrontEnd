@@ -27,6 +27,7 @@
     height: 100px;
     text-decoration: none;
     color: var(--secondary-color);
+    color: var(--secondary-color);
 }
 
 .header_nav_link {
