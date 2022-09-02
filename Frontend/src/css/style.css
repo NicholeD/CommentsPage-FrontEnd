@@ -88,3 +88,7 @@
 .state.active {
     display: block;
 }
+
+h4 {
+    font-weight: normal;
+}

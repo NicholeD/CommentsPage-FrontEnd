@@ -6,7 +6,7 @@ class CommentPage extends BaseClass {
 
     constructor() {
         super();
-        this.bindClassMethods(['onGet', 'onCreate', 'renderExample'], this);
+        this.bindClassMethods(['onGetComments', 'onCreate', 'renderComments'], this);
         this.dataStore = new DataStore();
     }
 
@@ -17,42 +17,38 @@ class CommentPage extends BaseClass {
         document.getElementById('create-comment-form').addEventListener('submit', this.onCreate);
         this.client = new CommentClient();
 
-        this.dataStore.addChangeListener(this.renderExample)
+        this.dataStore.addChangeListener(this.renderComments)
+        this.onGetComments()
     }
 
     /** Render Methods -----------------------------------------------------------------------------------------------*/
 
-    async renderExample() {
+    async renderComments() {
         let resultArea = document.getElementById("result-info");
 
-        const example = this.dataStore.get("example");
+        const comments = this.dataStore.get("comments");
 
-        if (example) {
-            resultArea.innerHTML = `
-                <div>ID: ${example.id}</div>
-                <div>Name: ${example.name}</div>
-            `
+        if (comments) {
+            let contentHTML = "<ul>"
+            for (let comment of comments) {
+                contentHTML += `<li>
+                        <h3>${comment.title}</h3>
+                        <h4>By: ${comment.owner}</h4>
+                        <p>${comment.content}</p>
+                        </li>`;
+            }
+            contentHTML += "</ul>";
+            resultArea.innerHTML = contentHTML;
         } else {
-            resultArea.innerHTML = "No Item";
+            resultArea.innerHTML = "No Comments";
         }
     }
 
     /** Event Handlers -----------------------------------------------------------------------------------------------*/
 
-    async onGet(event) {
-        // Prevent the page from refreshing on form submit
-        event.preventDefault();
-
-        let id = document.getElementById("id-field").value;
-        this.dataStore.set("example", null);
-
-        let result = await this.client.getExample(id, this.errorHandler);
-        this.dataStore.set("example", result);
-        if (result) {
-            this.showMessage(`Got ${result.name}!`)
-        } else {
-            this.errorHandler("Error doing GET!  Try again...");
-        }
+    async onGetComments() {
+        let result = await this.client.getAllComments(this.errorHandler);
+        this.dataStore.set("comments", result);
     }
 
     async onCreate(event) {
@@ -70,6 +66,7 @@ class CommentPage extends BaseClass {
         } else {
             this.errorHandler("Error creating!  Try again...");
         }
+        this.onGetComments()
     }
 }
 
